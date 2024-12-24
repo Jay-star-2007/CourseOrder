@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scheduling.mapper.TeacherMapper">
+    <select id="selectByTeacherCode" resultType="com.scheduling.entity.Teacher">
+        select * from teachers where teacher_code = #{teacherCode}
+    </select>
+    
+    <select id="selectByDepartment" resultType="com.scheduling.entity.Teacher">
+        select * from teachers where department = #{department}
+    </select>
+</mapper> 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scheduling.mapper.StudentMapper">
+    <select id="selectByStudentCode" resultType="com.scheduling.entity.Student">
+        select * from students where student_code = #{studentCode}
+    </select>
+    
+    <select id="selectByClassName" resultType="com.scheduling.entity.Student">
+        select * from students where class_name = #{className}
+    </select>
+    
+    <select id="selectByDepartment" resultType="com.scheduling.entity.Student">
+        select * from students where department = #{department}
+    </select>
+    
+    <select id="selectByGrade" resultType="com.scheduling.entity.Student">
+        select * from students where grade = #{grade}
+    </select>
+</mapper> 
