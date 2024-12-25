@@ -1,6 +1,7 @@
 package com.scheduling.common.util;
 
 import com.scheduling.common.config.JwtConfig;
+import com.scheduling.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,6 +22,18 @@ public class JwtUtil {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", username);
         claims.put("role", role);
+        
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtConfig.getExpiration() * 1000))
+                .signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret())
+                .compact();
+    }
+    public String generateToken(User user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("username", user.getUsername());
+        claims.put("role", user.getRole().name());
         
         return Jwts.builder()
                 .setClaims(claims)

@@ -6,6 +6,6 @@
     </select>
     
     <select id="selectByDepartment" resultType="com.scheduling.entity.Teacher">
-        select * from teachers where department = #{department}
+        select * from teachers where department LIKE CONCAT('%', #{department}, '%')
     </select>
 </mapper> 

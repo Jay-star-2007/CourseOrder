@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,8 +16,9 @@ import java.util.List;
 public class Teacher {
     @TableId(type = IdType.AUTO)
     private Long id;
-    
-    @TableField(nullable = false)
+
+    @TableField
+    @NotNull
     private String name;
     
     @TableField("teacher_code")
@@ -24,7 +26,8 @@ public class Teacher {
     
     private String department;
     
-    @TableField(nullable = false)
+    @TableField
+    @NotNull
     @Enumerated(EnumType.STRING)
     private User.UserRole role = User.UserRole.TEACHER;  // 默认为教师角色
     

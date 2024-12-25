@@ -14,10 +14,10 @@ public class Course {
     @TableId(type = IdType.AUTO)
     private Long id;
     
-    @TableField(value = "course_name", nullable = false)
+    @TableField(value = "course_name", insertStrategy = FieldStrategy.NOT_NULL)
     private String courseName;
     
-    @TableField(value = "credit_hours", nullable = false)
+    @TableField(value = "credit_hours", insertStrategy = FieldStrategy.NOT_NULL)
     private Integer creditHours;
     
     @TableField(value = "course_code")

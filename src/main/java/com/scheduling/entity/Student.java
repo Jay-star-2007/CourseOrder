@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -45,7 +46,8 @@ public class Student {
     @TableField("email")
     private String email;
     
-    @TableField(nullable = false)
+    @TableField
+    @NotNull
     @Enumerated(EnumType.STRING)
     private User.UserRole role = User.UserRole.STUDENT;  // 默认为学生角色
     

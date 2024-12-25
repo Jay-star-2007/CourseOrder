@@ -17,13 +17,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final JwtUtil jwtUtil;
-    private final JwtConfig jwtConfig;
+    @Autowired
+    private JwtUtil jwtUtil;
 
-    public SecurityConfig(JwtUtil jwtUtil, JwtConfig jwtConfig) {
-        this.jwtUtil = jwtUtil;
-        this.jwtConfig = jwtConfig;
-    }
+    @Autowired
+    private JwtConfig jwtConfig;
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
@@ -42,12 +40,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
+            .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
             .antMatchers("/api/auth/**").permitAll()
             .antMatchers("/api/admin/**").hasRole("ADMIN")
             .antMatchers("/api/teacher/**").hasRole("TEACHER")
             .antMatchers("/api/student/**").hasRole("STUDENT")
             .anyRequest().authenticated()
             .and()
-            .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+            .headers().frameOptions().disable();
     }
 } 

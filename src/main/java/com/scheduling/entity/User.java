@@ -15,16 +15,16 @@ public class User {
     @TableId(type = IdType.AUTO)
     private Long id;
     
-    @TableField(nullable = false)
+    @TableField(insertStrategy = FieldStrategy.NOT_NULL)
     private String username;
     
-    @TableField(nullable = false)
+    @TableField(insertStrategy = FieldStrategy.NOT_NULL)
     private String password;
     
     @TableField("real_name")
     private String realName;
     
-    @TableField(nullable = false)
+    @TableField(insertStrategy = FieldStrategy.NOT_NULL)
     @Enumerated(EnumType.STRING)
     private UserRole role;
     

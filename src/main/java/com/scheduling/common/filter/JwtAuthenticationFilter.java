@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -30,35 +31,34 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, 
-                                  FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) 
+            throws ServletException, IOException {
+        
         String token = request.getHeader(jwtConfig.getTokenHeader());
         
-        if (StringUtils.isNotBlank(token) && token.startsWith(jwtConfig.getTokenPrefix())) {
-            token = token.substring(jwtConfig.getTokenPrefix().length());
-            
+        if (StringUtils.isNotBlank(token)) {
             try {
+                // 验证token
                 if (jwtUtil.validateToken(token)) {
                     Claims claims = jwtUtil.getClaimsFromToken(token);
-                    String username = claims.get("username", String.class);
-                    String role = claims.get("role", String.class);
+                    String username = claims.get("username").toString();
+                    String role = claims.get("role").toString();
                     
                     // 创建认证信息
-                    UsernamePasswordAuthenticationToken authentication = 
-                        new UsernamePasswordAuthenticationToken(
-                            username, 
-                            null,
-                            Collections.singleton(new SimpleGrantedAuthority("ROLE_" + role))
-                        );
+                    List<SimpleGrantedAuthority> authorities = Collections.singletonList(
+                        new SimpleGrantedAuthority("ROLE_" + role)
+                    );
                     
+                    UsernamePasswordAuthenticationToken authentication = 
+                        new UsernamePasswordAuthenticationToken(username, null, authorities);
+                        
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             } catch (Exception e) {
-                log.error("JWT Authentication failed: {}", e.getMessage());
-                SecurityContextHolder.clearContext();
+                log.error("Could not set user authentication in security context", e);
             }
         }
         
-        filterChain.doFilter(request, response);
+        chain.doFilter(request, response);
     }
 } 

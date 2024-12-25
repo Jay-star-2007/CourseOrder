@@ -21,21 +21,20 @@ public class JwtInterceptor implements HandlerInterceptor {
     
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        String token = request.getHeader("Authorization");
-        
         // 如果是OPTIONS请求，直接放行
         if (request.getMethod().equals("OPTIONS")) {
             return true;
         }
         
+        String token = request.getHeader("Authorization");
+        
         // 检查token是否存在
-        if (StringUtils.isBlank(token) || !token.startsWith("Bearer ")) {
+        if (StringUtils.isBlank(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
         
         // 验证token
-        token = token.substring(7);
         if (!jwtUtil.validateToken(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
@@ -50,7 +49,6 @@ public class JwtInterceptor implements HandlerInterceptor {
         
         // 将用户信息存入request
         User user = new User();
-        user.setId(Long.parseLong(claims.get("userId").toString()));
         user.setUsername(claims.get("username").toString());
         user.setRole(User.UserRole.valueOf(claims.get("role").toString()));
         request.setAttribute("currentUser", user);
